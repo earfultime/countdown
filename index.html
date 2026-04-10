@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countdown Event</title>
+  <meta name="description" content="Countdown event dengan efek parallax." />
+
+  <!-- Open Graph / Twitter Card -->
+  <meta property="og:title" content="Countdown Event" />
+  <meta property="og:description" content="Lihat countdown event ini." />
+  <meta property="og:image" content="https://cdn.phototourl.com/free/2026-04-10-a7d971ce-3a19-42a9-9858-0b082333808f.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://USERNAME.github.io/REPO/" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Countdown Event" />
+  <meta name="twitter:description" content="Lihat countdown event ini." />
+  <meta name="twitter:image" content="https://cdn.phototourl.com/free/2026-04-10-a7d971ce-3a19-42a9-9858-0b082333808f.png" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="hero">
+    <div class="overlay"></div>
+    <section class="content">
+      <h1>Menuju Hari Spesial</h1>
+      <p class="subtitle">Countdown dimulai sekarang</p>
+
+      <div id="countdown" class="countdown">
+        <div><span id="days">00</span><small>Hari</small></div>
+        <div><span id="hours">00</span><small>Jam</small></div>
+        <div><span id="minutes">00</span><small>Menit</small></div>
+        <div><span id="seconds">00</span><small>Detik</small></div>
+      </div>
+
+      <p id="done" class="done hidden">🎉 Waktunya tiba!</p>
+    </section>
+  </main>
+
+  <script>
+    // Ganti tanggal target sesuai kebutuhan
+    const targetDate = new Date("2026-12-31T23:59:59").getTime();
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const doneEl = document.getElementById("done");
+
+    const pad = (n) => String(n).padStart(2, "0");
+
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        clearInterval(timer);
+        daysEl.textContent = "00";
+        hoursEl.textContent = "00";
+        minutesEl.textContent = "00";
+        secondsEl.textContent = "00";
+        doneEl.classList.remove("hidden");
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      daysEl.textContent = pad(days);
+      hoursEl.textContent = pad(hours);
+      minutesEl.textContent = pad(minutes);
+      secondsEl.textContent = pad(seconds);
+    }, 1000);
+  </script>
+</body>
+</html>
