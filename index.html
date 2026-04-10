@@ -1,79 +1,186 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Countdown Event</title>
-  <meta name="description" content="Countdown event dengan efek parallax." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coming Soon</title>
 
-  <!-- Open Graph / Twitter Card -->
-  <meta property="og:title" content="Countdown Event" />
-  <meta property="og:description" content="Lihat countdown event ini." />
-  <meta property="og:image" content="https://cdn.phototourl.com/free/2026-04-10-a7d971ce-3a19-42a9-9858-0b082333808f.png" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://USERNAME.github.io/REPO/" />
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Countdown Event" />
-  <meta name="twitter:description" content="Lihat countdown event ini." />
-  <meta name="twitter:image" content="https://cdn.phototourl.com/free/2026-04-10-a7d971ce-3a19-42a9-9858-0b082333808f.png" />
+body {
+  overflow: hidden;
+  background: black;
+}
 
-  <link rel="stylesheet" href="style.css" />
+html {
+  font-size: clamp(12px, 1.2vw, 18px);
+}
+
+/* CONTAINER */
+.parallax {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* BACKGROUND */
+.bg {
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  top: -5%;
+  left: -5%;
+  background-image: url('https://cdn.phototourl.com/free/2026-04-10-a7d971ce-3a19-42a9-9858-0b082333808f.png');
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+/* OVERLAY */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+/* CENTER */
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 800px;
+  padding: 0 20px;
+  text-align: center;
+  color: white;
+}
+
+/* TITLE */
+.title {
+  font-size: clamp(40px, 8vw, 80px);
+  letter-spacing: clamp(5px, 1.5vw, 12px);
+  font-weight: 600;
+}
+
+/* COUNTDOWN */
+.countdown {
+  display: flex;
+  gap: clamp(10px, 3vw, 25px);
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.box span {
+  display: block;
+  font-size: clamp(20px, 5vw, 40px);
+  font-weight: 600;
+}
+
+.label {
+  font-size: clamp(10px, 2vw, 12px);
+  opacity: 0.7;
+  letter-spacing: 1px;
+}
+</style>
 </head>
+
 <body>
-  <main class="hero">
-    <div class="overlay"></div>
-    <section class="content">
-      <h1>Menuju Hari Spesial</h1>
-      <p class="subtitle">Countdown dimulai sekarang</p>
 
-      <div id="countdown" class="countdown">
-        <div><span id="days">00</span><small>Hari</small></div>
-        <div><span id="hours">00</span><small>Jam</small></div>
-        <div><span id="minutes">00</span><small>Menit</small></div>
-        <div><span id="seconds">00</span><small>Detik</small></div>
-      </div>
+<div class="parallax">
+  <div class="bg"></div>
+  <div class="overlay"></div>
 
-      <p id="done" class="done hidden">🎉 Waktunya tiba!</p>
-    </section>
-  </main>
+  <div class="center">
+    <div class="title">SOON</div>
 
-  <script>
-    // Ganti tanggal target sesuai kebutuhan
-    const targetDate = new Date("2026-12-31T23:59:59").getTime();
+    <div class="countdown">
+      <div class="box"><span id="days">00</span><div class="label">Hari</div></div>
+      <div class="box"><span id="hours">00</span><div class="label">Jam</div></div>
+      <div class="box"><span id="minutes">00</span><div class="label">Menit</div></div>
+      <div class="box"><span id="seconds">00</span><div class="label">Detik</div></div>
+    </div>
+  </div>
+</div>
 
-    const daysEl = document.getElementById("days");
-    const hoursEl = document.getElementById("hours");
-    const minutesEl = document.getElementById("minutes");
-    const secondsEl = document.getElementById("seconds");
-    const doneEl = document.getElementById("done");
+<script>
+const bg = document.querySelector('.bg');
 
-    const pad = (n) => String(n).padStart(2, "0");
+let currentX = 0, currentY = 0;
+let targetX = 0, targetY = 0;
 
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const distance = targetDate - now;
+/* SMOOTH LOOP */
+function animate() {
+  currentX += (targetX - currentX) * 0.05;
+  currentY += (targetY - currentY) * 0.05;
 
-      if (distance <= 0) {
-        clearInterval(timer);
-        daysEl.textContent = "00";
-        hoursEl.textContent = "00";
-        minutesEl.textContent = "00";
-        secondsEl.textContent = "00";
-        doneEl.classList.remove("hidden");
-        return;
-      }
+  bg.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.1)`;
+  requestAnimationFrame(animate);
+}
+animate();
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((distance / (1000 * 60)) % 60);
-      const seconds = Math.floor((distance / 1000) % 60);
+/* DESKTOP (mouse) */
+document.addEventListener('mousemove', (e) => {
+  targetX = (window.innerWidth / 2 - e.clientX) / 20;
+  targetY = (window.innerHeight / 2 - e.clientY) / 20;
+});
 
-      daysEl.textContent = pad(days);
-      hoursEl.textContent = pad(hours);
-      minutesEl.textContent = pad(minutes);
-      secondsEl.textContent = pad(seconds);
-    }, 1000);
-  </script>
+/* MOBILE (touch) */
+document.addEventListener('touchmove', (e) => {
+  const touch = e.touches[0];
+  targetX = (window.innerWidth / 2 - touch.clientX) / 20;
+  targetY = (window.innerHeight / 2 - touch.clientY) / 20;
+});
+
+/* GYRO (mobile tilt) */
+if (window.DeviceOrientationEvent) {
+  window.addEventListener('deviceorientation', (e) => {
+    targetX = e.gamma / 3;
+    targetY = e.beta / 3;
+  });
+}
+
+/* AUTO IDLE (biar gak mati) */
+let t = 0;
+setInterval(() => {
+  if (Math.abs(targetX) < 1 && Math.abs(targetY) < 1) {
+    targetX = Math.sin(t) * 5;
+    targetY = Math.cos(t) * 5;
+    t += 0.05;
+  }
+}, 50);
+
+/* COUNTDOWN WIB */
+const targetDate = new Date("2026-05-01T00:00:00+07:00").getTime();
+
+setInterval(() => {
+  const now = new Date().getTime();
+  const distance = targetDate - now;
+
+  if (distance < 0) {
+    document.querySelector(".countdown").innerHTML = "<h2>It's Time</h2>";
+    return;
+  }
+
+  const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const h = Math.floor((distance / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((distance / (1000 * 60)) % 60);
+  const s = Math.floor((distance / 1000) % 60);
+
+  document.getElementById("days").innerText = d.toString().padStart(2, "0");
+  document.getElementById("hours").innerText = h.toString().padStart(2, "0");
+  document.getElementById("minutes").innerText = m.toString().padStart(2, "0");
+  document.getElementById("seconds").innerText = s.toString().padStart(2, "0");
+
+}, 1000);
+</script>
+
 </body>
 </html>
